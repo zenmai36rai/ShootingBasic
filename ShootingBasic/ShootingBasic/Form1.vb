@@ -79,16 +79,13 @@
                 _c._l = True
             Case Keys.Right
                 _c._r = True
-        End Select
-        Select Case e.KeyCode
             Case Keys.Up
                 _c._u = True
             Case Keys.Down
                 _c._d = True
+            Case Keys.Space
+                _c._s = True
         End Select
-        If e.KeyCode = Keys.Space Then
-            _c._s = True
-        End If
     End Sub
 
     Private Sub Form1_KeyUp(sender As Object, e As KeyEventArgs) Handles MyBase.KeyUp
@@ -97,15 +94,12 @@
                 _c._l = False
             Case Keys.Right
                 _c._r = False
-        End Select
-        Select Case e.KeyCode
             Case Keys.Up
                 _c._u = False
             Case Keys.Down
                 _c._d = False
+            Case Keys.Space
+                _c._s = False
         End Select
-        If e.KeyCode = Keys.Space Then
-            _c._s = False
-        End If
     End Sub
 End Class
