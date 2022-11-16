@@ -10,10 +10,27 @@
         Public _img As Bitmap = New Bitmap("..\..\Resources\fighter.bmp")
         Public _x As Integer = 180
         Public _y As Integer = 270
+        Public SPEED_FIGHTER = 4
+        Public Sub Move(c As Controller, s As Shot)
+            If c._l = True Then
+                _x = _x - SPEED_FIGHTER
+            ElseIf c._r = True Then
+                _x = _x + SPEED_FIGHTER
+            End If
+            If c._u = True Then
+                _y = _y - SPEED_FIGHTER
+            ElseIf c._d = True Then
+                _y = _y + SPEED_FIGHTER
+            End If
+            If c._s = True Then
+                s._shoot(_x, _y)
+            End If
+        End Sub
     End Class
     Private Class Shot
         Public _img As Bitmap = New Bitmap("..\..\Resources\Shot.bmp")
         Public ID_MAX = 5
+        Public SPEED_SHOT = 8
         Private _id As Integer = 0
         Public _x() As Integer = {-100, -100, -100, -100, -100}
         Public _y() As Integer = {-100, -100, -100, -100, -100}
@@ -30,7 +47,7 @@
         End Sub
         Public Sub Move()
             For i = 0 To (ID_MAX - 1)
-                _y(i) = _y(i) - 8
+                _y(i) = _y(i) - SPEED_SHOT
             Next
         End Sub
     End Class
@@ -40,19 +57,7 @@
     Private _f As Fighter = New Fighter
     Private _s As Shot = New Shot
     Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer1.Tick
-        If _c._l = True Then
-            _f._x = _f._x - 4
-        ElseIf _c._r = True Then
-            _f._x = _f._x + 4
-        End If
-        If _c._u = True Then
-            _f._y = _f._y - 4
-        ElseIf _c._d = True Then
-            _f._y = _f._y + 4
-        End If
-        If _c._s = True Then
-            _s._shoot(_f._x, _f._y)
-        End If
+        _f.Move(_c, _s)
         For i = 0 To (_s.ID_MAX - 1)
             _s.Move()
         Next
