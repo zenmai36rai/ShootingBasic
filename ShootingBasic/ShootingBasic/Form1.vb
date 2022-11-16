@@ -32,6 +32,8 @@
             Next
         End Sub
     End Class
+    Private canvas As Bitmap
+    Private _g As Graphics
     Private _c As Controller = New Controller
     Private _f As Fighter = New Fighter
     Private _s As Shot = New Shot
@@ -47,27 +49,32 @@
         For i = 0 To (_s.ID_MAX - 1)
             _s.Move()
         Next
-        Dim g As Graphics = PictureBox1.CreateGraphics()
-            g.FillRectangle(Brushes.Black, 0, 0, PictureBox1.Width, PictureBox1.Height)
-            For i = 0 To 2
-                g.DrawImage(_s._img, _s._x(i), _s._y(i))
-            Next
-            g.DrawImage(_f._img, _f._x, _f._y)
+        _g = Graphics.FromImage(canvas)
+        _g.FillRectangle(Brushes.Black, 0, 0, Me.Width, Me.Height)
+        For i = 0 To 2
+            _g.DrawImage(_s._img, _s._x(i), _s._y(i))
+        Next
+        _g.DrawImage(_f._img, _f._x, _f._y)
+        _g.Dispose()
+        PictureBox1.Image = canvas
     End Sub
 
-    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
+    Private Sub Button1_Click(sender As Object, e As EventArgs)
         _f._x = _f._x - 4
     End Sub
 
-    Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
+    Private Sub Button2_Click(sender As Object, e As EventArgs)
         _s._shoot(_f._x, _f._y)
     End Sub
 
-    Private Sub Button3_Click(sender As Object, e As EventArgs) Handles Button3.Click
+    Private Sub Button3_Click(sender As Object, e As EventArgs)
         _f._x = _f._x + 4
     End Sub
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        PictureBox1.Width = Me.Width
+        PictureBox1.Height = Me.Height
+        canvas = New Bitmap(Me.Width, Me.Height)
         Timer1.Start()
     End Sub
 
