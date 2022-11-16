@@ -119,5 +119,11 @@
     </None>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\alien.png" />
+    <Content Include="Resources\fighter.png" />
+    <Content Include="Resources\shield.png" />
+    <Content Include="Resources\shot.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>
