@@ -10,3 +10,15 @@ C:\Users\宮澤 郷介\source\repos\ShootingBasic\ShootingBasic\obj\Debug\Shooti
 C:\Users\宮澤 郷介\source\repos\ShootingBasic\ShootingBasic\obj\Debug\ShootingBasic.exe
 C:\Users\宮澤 郷介\source\repos\ShootingBasic\ShootingBasic\obj\Debug\ShootingBasic.xml
 C:\Users\宮澤 郷介\source\repos\ShootingBasic\ShootingBasic\obj\Debug\ShootingBasic.pdb
+C:\Users\宮澤 郷介\source\repos\zenmai36rai\ShootingBasic\ShootingBasic\ShootingBasic\bin\Debug\ShootingBasic.exe.config
+C:\Users\宮澤 郷介\source\repos\zenmai36rai\ShootingBasic\ShootingBasic\ShootingBasic\bin\Debug\ShootingBasic.exe
+C:\Users\宮澤 郷介\source\repos\zenmai36rai\ShootingBasic\ShootingBasic\ShootingBasic\bin\Debug\ShootingBasic.pdb
+C:\Users\宮澤 郷介\source\repos\zenmai36rai\ShootingBasic\ShootingBasic\ShootingBasic\bin\Debug\ShootingBasic.xml
+C:\Users\宮澤 郷介\source\repos\zenmai36rai\ShootingBasic\ShootingBasic\ShootingBasic\obj\Debug\ShootingBasic.vbprojAssemblyReference.cache
+C:\Users\宮澤 郷介\source\repos\zenmai36rai\ShootingBasic\ShootingBasic\ShootingBasic\obj\Debug\ShootingBasic.Form1.resources
+C:\Users\宮澤 郷介\source\repos\zenmai36rai\ShootingBasic\ShootingBasic\ShootingBasic\obj\Debug\ShootingBasic.Resources.resources
+C:\Users\宮澤 郷介\source\repos\zenmai36rai\ShootingBasic\ShootingBasic\ShootingBasic\obj\Debug\ShootingBasic.vbproj.GenerateResource.cache
+C:\Users\宮澤 郷介\source\repos\zenmai36rai\ShootingBasic\ShootingBasic\ShootingBasic\obj\Debug\ShootingBasic.vbproj.CoreCompileInputs.cache
+C:\Users\宮澤 郷介\source\repos\zenmai36rai\ShootingBasic\ShootingBasic\ShootingBasic\obj\Debug\ShootingBasic.exe
+C:\Users\宮澤 郷介\source\repos\zenmai36rai\ShootingBasic\ShootingBasic\ShootingBasic\obj\Debug\ShootingBasic.xml
+C:\Users\宮澤 郷介\source\repos\zenmai36rai\ShootingBasic\ShootingBasic\ShootingBasic\obj\Debug\ShootingBasic.pdb
