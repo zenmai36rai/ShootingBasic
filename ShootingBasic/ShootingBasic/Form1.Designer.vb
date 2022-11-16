@@ -39,6 +39,7 @@ Partial Class Form1
         Me.PictureBox1.Size = New System.Drawing.Size(426, 324)
         Me.PictureBox1.TabIndex = 0
         Me.PictureBox1.TabStop = False
+        Me.PictureBox1.WaitOnLoad = True
         '
         'Timer1
         '
