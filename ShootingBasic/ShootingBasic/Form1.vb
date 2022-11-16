@@ -85,6 +85,10 @@
                 _c._d = True
             Case Keys.Space
                 _c._s = True
+            Case Keys.Z
+                _c._s = True
+            Case Keys.X
+                _c._s = True
         End Select
     End Sub
 
@@ -99,6 +103,10 @@
             Case Keys.Down
                 _c._d = False
             Case Keys.Space
+                _c._s = False
+            Case Keys.Z
+                _c._s = False
+            Case Keys.X
                 _c._s = False
         End Select
     End Sub
