@@ -1,5 +1,7 @@
 ﻿Public Class Form1
     Private Class Controller
+        Public _d As Boolean = False
+        Public _u As Boolean = False
         Public _l As Boolean = False
         Public _r As Boolean = False
         Public _s As Boolean = False
@@ -43,6 +45,11 @@
         ElseIf _c._r = True Then
             _f._x = _f._x + 4
         End If
+        If _c._u = True Then
+            _f._y = _f._y - 4
+        ElseIf _c._d = True Then
+            _f._y = _f._y + 4
+        End If
         If _c._s = True Then
             _s._shoot(_f._x, _f._y)
         End If
@@ -59,18 +66,6 @@
         PictureBox1.Image = canvas
     End Sub
 
-    Private Sub Button1_Click(sender As Object, e As EventArgs)
-        _f._x = _f._x - 4
-    End Sub
-
-    Private Sub Button2_Click(sender As Object, e As EventArgs)
-        _s._shoot(_f._x, _f._y)
-    End Sub
-
-    Private Sub Button3_Click(sender As Object, e As EventArgs)
-        _f._x = _f._x + 4
-    End Sub
-
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         PictureBox1.Width = Me.Width
         PictureBox1.Height = Me.Height
@@ -78,12 +73,18 @@
         Timer1.Start()
     End Sub
 
-    Private Sub Form1_PreviewKeyDown(sender As Object, e As PreviewKeyDownEventArgs) Handles MyBase.PreviewKeyDown
+    Private Sub Form1_KeyDown(sender As Object, e As KeyEventArgs) Handles MyBase.KeyDown
         Select Case e.KeyCode
             Case Keys.Left
                 _c._l = True
             Case Keys.Right
                 _c._r = True
+        End Select
+        Select Case e.KeyCode
+            Case Keys.Up
+                _c._u = True
+            Case Keys.Down
+                _c._d = True
         End Select
         If e.KeyCode = Keys.Space Then
             _c._s = True
@@ -96,6 +97,12 @@
                 _c._l = False
             Case Keys.Right
                 _c._r = False
+        End Select
+        Select Case e.KeyCode
+            Case Keys.Up
+                _c._u = False
+            Case Keys.Down
+                _c._d = False
         End Select
         If e.KeyCode = Keys.Space Then
             _c._s = False
