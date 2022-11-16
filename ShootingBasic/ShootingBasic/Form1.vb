@@ -5,12 +5,12 @@
         Public _s As Boolean = False
     End Class
     Private Class Fighter
-        Public _img As Bitmap = New Bitmap("..\..\Resources\fighter.png")
-        Public _x As Integer = 150
-        Public _y As Integer = 220
+        Public _img As Bitmap = New Bitmap("..\..\Resources\fighter.bmp")
+        Public _x As Integer = 180
+        Public _y As Integer = 270
     End Class
     Private Class Shot
-        Public _img As Bitmap = New Bitmap("..\..\Resources\Shot.png")
+        Public _img As Bitmap = New Bitmap("..\..\Resources\Shot.bmp")
         Public ID_MAX = 5
         Private _id As Integer = 0
         Public _x() As Integer = {-100, -100, -100, -100, -100}
