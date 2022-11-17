@@ -13,8 +13,8 @@
     End Class
     Private Class Fighter
         Public _img As Bitmap = New Bitmap("..\..\Resources\fighter.bmp")
-        Public _x As Integer = 180
-        Public _y As Integer = 270
+        Public _x As Integer = 228
+        Public _y As Integer = 292
         Public SPEED_FIGHTER = 4
         Public Sub Move(c As Controller, s As Shot)
             If c._l = True Then
@@ -33,7 +33,7 @@
         End Sub
     End Class
     Private Class Shot
-        Public _img As Bitmap = New Bitmap("..\..\Resources\Shot.bmp")
+        Public _img As Bitmap = New Bitmap("..\..\Resources\shot.bmp")
         Public ID_MAX = 5
         Public SPEED_SHOT = 8
         Private _id As Integer = 0
@@ -56,11 +56,26 @@
             Next
         End Sub
     End Class
+    Private Class Invader
+        Public _img As Bitmap = New Bitmap("..\..\Resources\alien.bmp")
+        Public ID_MAX = 20
+        Public H_BUFF = 100
+        Public V_BUFF = 0
+        Public _x(20) As Integer
+        Public _y(20) As Integer
+        Public Sub New()
+            For i = 0 To (ID_MAX - 1)
+                _x(i) = (i Mod 5) * 64 + H_BUFF
+                _y(i) = Int(i / 5) * 64 + V_BUFF
+            Next
+        End Sub
+    End Class
     Private canvas As Bitmap
     Private _g As Graphics
     Private _c As Controller = New Controller
     Private _f As Fighter = New Fighter
     Private _s As Shot = New Shot
+    Private _a As Invader = New Invader
     Sub ControllerCheck()
         Dim ret As Integer
         ret = GetAsyncKeyState(Keys.Left)
@@ -82,6 +97,9 @@
         Next
         _g = Graphics.FromImage(canvas)
         _g.FillRectangle(Brushes.Black, 0, 0, Me.Width, Me.Height)
+        For i = 0 To (_a.ID_MAX - 1)
+            _g.DrawImage(_a._img, _a._x(i), _a._y(i))
+        Next
         For i = 0 To 2
             _g.DrawImage(_s._img, _s._x(i), _s._y(i))
         Next
