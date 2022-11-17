@@ -1,4 +1,8 @@
 ﻿Public Class Form1
+    <Runtime.InteropServices.DllImport("user32.dll")>
+    Private Shared Function GetAsyncKeyState(
+        ByVal nVirtKey As Integer) As Integer
+    End Function
     Private Class Controller
         Public _d As Boolean = False
         Public _u As Boolean = False
@@ -56,7 +60,21 @@
     Private _c As Controller = New Controller
     Private _f As Fighter = New Fighter
     Private _s As Shot = New Shot
+    Sub ControllerCheck()
+        Dim ret As Integer
+        ret = GetAsyncKeyState(Keys.Left)
+        _c._l = ret <> 0
+        ret = GetAsyncKeyState(Keys.Right)
+        _c._r = ret <> 0
+        ret = GetAsyncKeyState(Keys.Up)
+        _c._u = ret <> 0
+        ret = GetAsyncKeyState(Keys.Down)
+        _c._d = ret <> 0
+        ret = GetAsyncKeyState(Keys.Space)
+        _c._s = ret <> 0
+    End Sub
     Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer1.Tick
+        Call ControllerCheck()
         _f.Move(_c, _s)
         For i = 0 To (_s.ID_MAX - 1)
             _s.Move()
@@ -76,43 +94,5 @@
         PictureBox1.Height = Me.Height
         canvas = New Bitmap(Me.Width, Me.Height)
         Timer1.Start()
-    End Sub
-
-    Private Sub Form1_KeyDown(sender As Object, e As KeyEventArgs) Handles MyBase.KeyDown
-        Select Case e.KeyCode
-            Case Keys.Left
-                _c._l = True
-            Case Keys.Right
-                _c._r = True
-            Case Keys.Up
-                _c._u = True
-            Case Keys.Down
-                _c._d = True
-            Case Keys.Space
-                _c._s = True
-            Case Keys.Z
-                _c._s = True
-            Case Keys.X
-                _c._s = True
-        End Select
-    End Sub
-
-    Private Sub Form1_KeyUp(sender As Object, e As KeyEventArgs) Handles MyBase.KeyUp
-        Select Case e.KeyCode
-            Case Keys.Left
-                _c._l = False
-            Case Keys.Right
-                _c._r = False
-            Case Keys.Up
-                _c._u = False
-            Case Keys.Down
-                _c._d = False
-            Case Keys.Space
-                _c._s = False
-            Case Keys.Z
-                _c._s = False
-            Case Keys.X
-                _c._s = False
-        End Select
     End Sub
 End Class
