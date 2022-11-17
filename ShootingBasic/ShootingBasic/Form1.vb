@@ -14,7 +14,7 @@
     Private Class Fighter
         Public _img As Bitmap = New Bitmap("..\..\Resources\fighter.bmp")
         Public _x As Integer = 228
-        Public _y As Integer = 292
+        Public _y As Integer = 340
         Public SPEED_FIGHTER = 4
         Public Sub Move(c As Controller, s As Shot)
             If c._l = True Then
@@ -39,6 +39,8 @@
         Private _id As Integer = 0
         Public _x() As Integer = {-100, -100, -100, -100, -100}
         Public _y() As Integer = {-100, -100, -100, -100, -100}
+        Public _width As Integer = _img.Width
+        Public _height As Integer = _img.Height
         Public Sub _shoot(ByVal x As Integer, ByVal y As Integer)
             If _y(_id) > -100 Then
                 Exit Sub
@@ -63,13 +65,33 @@
         Public V_BUFF = 0
         Public _x(20) As Integer
         Public _y(20) As Integer
+        Public _width As Integer = _img.Width
+        Public _height As Integer = _img.Height
+        Public _def(20) As Integer
         Public Sub New()
             For i = 0 To (ID_MAX - 1)
                 _x(i) = (i Mod 5) * 64 + H_BUFF
                 _y(i) = Int(i / 5) * 64 + V_BUFF
+                _def(i) = 10
             Next
         End Sub
     End Class
+    Private Function CrossJudge(a As Invader, s As Shot) As Boolean
+        For i = 0 To a.ID_MAX - 1
+            For j = 0 To s.ID_MAX - 1
+                If (a._x(i) < (s._x(j) + s._width)) And (s._x(j) < a._x(i) + a._width) Then
+                    If (a._y(i) < s._y(j) + s._height) And (s._y(j) < a._y(i) + a._height) Then
+                        a._def(i) = a._def(i) - 1
+                        s._y(j) = -100
+                        If a._def(i) = 0 Then
+                            a._y(i) = 1000
+                        End If
+                    End If
+                    End If
+            Next
+        Next
+        Return False
+    End Function
     Private canvas As Bitmap
     Private _g As Graphics
     Private _c As Controller = New Controller
@@ -91,6 +113,7 @@
     End Sub
     Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer1.Tick
         Call ControllerCheck()
+        CrossJudge(_a, _s)
         _f.Move(_c, _s)
         For i = 0 To (_s.ID_MAX - 1)
             _s.Move()
