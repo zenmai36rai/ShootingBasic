@@ -9,6 +9,7 @@
         Public _l As Boolean = False
         Public _r As Boolean = False
         Public _s As Boolean = False
+        Public _ctrl As Boolean = False
     End Class
     Private Class Fighter
         Public _img As Bitmap = New Bitmap("..\..\Resources\fighter.bmp")
@@ -26,7 +27,7 @@
             ElseIf c._d = True Then
                 _y = _y + SPEED_FIGHTER
             End If
-            If c._s = True Then
+            If (c._s = True) Or (c._ctrl = True) Then
                 s._shoot(_x, _y)
             End If
         End Sub
@@ -94,5 +95,17 @@
         PictureBox1.Height = Me.Height
         canvas = New Bitmap(Me.Width, Me.Height)
         Timer1.Start()
+    End Sub
+
+    Private Sub Form1_KeyDown(sender As Object, e As KeyEventArgs) Handles MyBase.KeyDown
+        If (e.Modifiers And Keys.Control) = Keys.Control Then
+            _c._ctrl = True
+        End If
+    End Sub
+
+    Private Sub Form1_KeyUp(sender As Object, e As KeyEventArgs) Handles MyBase.KeyUp
+        If (e.Modifiers And Keys.Control) <> Keys.Control Then
+            _c._ctrl = False
+        End If
     End Sub
 End Class
