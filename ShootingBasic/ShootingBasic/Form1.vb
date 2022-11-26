@@ -63,6 +63,7 @@
         Public ID_MAX = 20
         Public H_BUFF = 100
         Public V_BUFF = 0
+        Public _t As Double = 0
         Public _x(20) As Integer
         Public _y(20) As Integer
         Public _width As Integer = _img.Width
@@ -75,29 +76,67 @@
                 _def(i) = 10
             Next
         End Sub
+        Public Sub Move(ByRef e As EnemyShot)
+            For i = 0 To (ID_MAX - 1)
+                _t = _t + 0.0006
+                _x(i) = _x(i) - Math.Cos(_t)
+            Next
+            Dim r As Integer = Rnd() * 2048
+            If r < ID_MAX Then
+                e._shoot(_x(r), _y(r))
+            End If
+        End Sub
+    End Class
+    Private Class EnemyShot
+        Public _img As Bitmap = New Bitmap("..\..\Resources\e_shot.bmp")
+        Public SPEED_SHOT = 4
+        Public ID_MAX = 5
+        Private _id As Integer = 0
+        Public _x() As Integer = {-100, -100, -100, -100, -100}
+        Public _y() As Integer = {1000, 1000, 1000, 1000, 1000}
+        Public _width As Integer = _img.Width
+        Public _height As Integer = _img.Height
+        Public Sub _shoot(ByVal x As Integer, ByVal y As Integer)
+            If _y(_id) < 1000 Then
+                Exit Sub
+            End If
+            _x(_id) = x
+            _y(_id) = y
+            _id = _id + 1
+            If _id = ID_MAX Then
+                _id = 0
+            End If
+        End Sub
+        Public Sub Move()
+            For i = 0 To (ID_MAX - 1)
+                _y(i) = _y(i) + SPEED_SHOT
+            Next
+        End Sub
     End Class
     Private Function CrossJudge(a As Invader, s As Shot) As Boolean
-        For i = 0 To a.ID_MAX - 1
-            For j = 0 To s.ID_MAX - 1
-                If (a._x(i) < (s._x(j) + s._width)) And (s._x(j) < a._x(i) + a._width) Then
-                    If (a._y(i) < s._y(j) + s._height) And (s._y(j) < a._y(i) + a._height) Then
-                        a._def(i) = a._def(i) - 1
-                        s._y(j) = -100
-                        If a._def(i) = 0 Then
-                            a._y(i) = 1000
+            For i = 0 To a.ID_MAX - 1
+                For j = 0 To s.ID_MAX - 1
+                    If (a._x(i) < (s._x(j) + s._width)) And (s._x(j) < a._x(i) + a._width) Then
+                        If (a._y(i) < s._y(j) + s._height) And (s._y(j) < a._y(i) + a._height) Then
+                            a._def(i) = a._def(i) - 1
+                            s._y(j) = -100
+                            If a._def(i) = 0 Then
+                                a._y(i) = 1000
+                            End If
                         End If
                     End If
-                    End If
+                Next
             Next
-        Next
-        Return False
-    End Function
-    Private canvas As Bitmap
+            Return False
+        End Function
+        Private canvas As Bitmap
     Private _g As Graphics
     Private _c As Controller = New Controller
     Private _f As Fighter = New Fighter
     Private _s As Shot = New Shot
     Private _a As Invader = New Invader
+    Private _e As EnemyShot = New EnemyShot
+
     Sub ControllerCheck()
         Dim ret As Integer
         ret = GetAsyncKeyState(Keys.Left)
@@ -118,6 +157,12 @@
         For i = 0 To (_s.ID_MAX - 1)
             _s.Move()
         Next
+        For i = 0 To (_a.ID_MAX - 1)
+            _a.Move(_e)
+        Next
+        For i = 0 To (_e.ID_MAX - 1)
+            _e.Move()
+        Next
         _g = Graphics.FromImage(canvas)
         _g.FillRectangle(Brushes.Black, 0, 0, Me.Width, Me.Height)
         For i = 0 To (_a.ID_MAX - 1)
@@ -127,6 +172,9 @@
             _g.DrawImage(_s._img, _s._x(i), _s._y(i))
         Next
         _g.DrawImage(_f._img, _f._x, _f._y)
+        For i = 0 To (_e.ID_MAX - 1)
+            _g.DrawImage(_e._img, _e._x(i), _e._y(i))
+        Next
         _g.Dispose()
         PictureBox1.Image = canvas
     End Sub
