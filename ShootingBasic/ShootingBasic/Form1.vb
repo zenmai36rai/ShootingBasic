@@ -136,6 +136,7 @@
     Private _s As Shot = New Shot
     Private _a As Invader = New Invader
     Private _e As EnemyShot = New EnemyShot
+    Public _gxy As Bitmap = New Bitmap("..\..\Resources\galaxy.bmp")
 
     Sub ControllerCheck()
         Dim ret As Integer
@@ -164,7 +165,8 @@
             _e.Move()
         Next
         _g = Graphics.FromImage(canvas)
-        _g.FillRectangle(Brushes.Black, 0, 0, Me.Width, Me.Height)
+        '_g.FillRectangle(Brushes.Black, 0, 0, Me.Width, Me.Height)
+        _g.DrawImage(_gxy, 0, 0)
         For i = 0 To (_a.ID_MAX - 1)
             _g.DrawImage(_a._img, _a._x(i), _a._y(i))
         Next
