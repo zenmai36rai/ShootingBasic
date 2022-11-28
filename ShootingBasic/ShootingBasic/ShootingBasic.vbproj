@@ -122,6 +122,7 @@
   <ItemGroup>
     <Content Include="Resources\alien.bmp" />
     <Content Include="Resources\alien.png" />
+    <Content Include="Resources\bomb.wav" />
     <Content Include="Resources\e_shot.bmp" />
     <Content Include="Resources\fighter.bmp" />
     <Content Include="Resources\fighter.png" />
@@ -130,6 +131,7 @@
     <Content Include="Resources\shield.png" />
     <Content Include="Resources\shot.bmp" />
     <Content Include="Resources\shot.png" />
+    <Content Include="Resources\shot.wav" />
     <Content Include="Resources\wpm001.wav" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />

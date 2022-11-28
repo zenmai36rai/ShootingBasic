@@ -3,6 +3,7 @@
     Private Shared Function GetAsyncKeyState(
         ByVal nVirtKey As Integer) As Integer
     End Function
+    Private Declare Function mciSendString Lib "winmm.dll" Alias "mciSendStringA" (ByVal lpstrCommand As String, ByVal lpstrReturnString As String, ByVal uReturnLength As Long, ByVal hwndCallback As Long) As Long
     Private Class Controller
         Public _d As Boolean = False
         Public _u As Boolean = False
@@ -34,6 +35,7 @@
     End Class
     Private Class Shot
         Public _img As Bitmap = New Bitmap("..\..\Resources\shot.bmp")
+        Private SHOT_WAV As String = "..\..\Resources\shot.wav"
         Public ID_MAX = 5
         Public SPEED_SHOT = 8
         Private _id As Integer = 0
@@ -45,6 +47,8 @@
             If _y(_id) > -100 Then
                 Exit Sub
             End If
+
+            mciSendString("play """ & SHOT_WAV & """", "", 0, 0)
             _x(_id) = x
             _y(_id) = y
             _id = _id + 1
@@ -113,23 +117,25 @@
             Next
         End Sub
     End Class
+    Private BOMB_WAV As String = "..\..\Resources\bomb.wav"
     Private Function CrossJudge(a As Invader, s As Shot) As Boolean
-            For i = 0 To a.ID_MAX - 1
-                For j = 0 To s.ID_MAX - 1
-                    If (a._x(i) < (s._x(j) + s._width)) And (s._x(j) < a._x(i) + a._width) Then
-                        If (a._y(i) < s._y(j) + s._height) And (s._y(j) < a._y(i) + a._height) Then
-                            a._def(i) = a._def(i) - 1
-                            s._y(j) = -100
-                            If a._def(i) = 0 Then
-                                a._y(i) = 1000
-                            End If
+        For i = 0 To a.ID_MAX - 1
+            For j = 0 To s.ID_MAX - 1
+                If (a._x(i) < (s._x(j) + s._width)) And (s._x(j) < a._x(i) + a._width) Then
+                    If (a._y(i) < s._y(j) + s._height) And (s._y(j) < a._y(i) + a._height) Then
+                        a._def(i) = a._def(i) - 1
+                        s._y(j) = -100
+                        If a._def(i) = 0 Then
+                            mciSendString("play """ & BOMB_WAV & """", "", 0, 0)
+                            a._y(i) = 1000
                         End If
                     End If
-                Next
+                End If
             Next
-            Return False
-        End Function
-        Private canvas As Bitmap
+        Next
+        Return False
+    End Function
+    Private canvas As Bitmap
     Private _g As Graphics
     Private _c As Controller = New Controller
     Private _f As Fighter = New Fighter
