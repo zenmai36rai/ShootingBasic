@@ -130,6 +130,7 @@
     <Content Include="Resources\shield.png" />
     <Content Include="Resources\shot.bmp" />
     <Content Include="Resources\shot.png" />
+    <Content Include="Resources\wpm001.wav" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>

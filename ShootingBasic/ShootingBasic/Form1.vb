@@ -136,8 +136,8 @@
     Private _s As Shot = New Shot
     Private _a As Invader = New Invader
     Private _e As EnemyShot = New EnemyShot
-    Public _gxy As Bitmap = New Bitmap("..\..\Resources\galaxy.bmp")
-
+    Private _gxy As Bitmap = New Bitmap("..\..\Resources\galaxy.bmp")
+    Private _wav As System.Media.SoundPlayer = Nothing
     Sub ControllerCheck()
         Dim ret As Integer
         ret = GetAsyncKeyState(Keys.Left)
@@ -185,6 +185,8 @@
         PictureBox1.Width = Me.Width
         PictureBox1.Height = Me.Height
         canvas = New Bitmap(Me.Width, Me.Height)
+        _wav = New System.Media.SoundPlayer("..\..\Resources\wpm001.wav")
+        _wav.PlayLooping()
         Timer1.Start()
     End Sub
 
