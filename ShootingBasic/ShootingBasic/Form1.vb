@@ -52,7 +52,6 @@
             End If
 
             If _buff = BUFF_WAV Then
-                mciSendString("stop """ & SHOT_WAV & """", "", 0, 0)
                 mciSendString("play """ & SHOT_WAV & """", "", 0, 0)
             Else
                 mciSendString("play """ & SHOT_WAV_02 & """", "", 0, 0)
@@ -131,6 +130,8 @@
         End Sub
     End Class
     Private BOMB_WAV As String = "..\..\Resources\bomb.wav"
+    Private BOMB_WAV_02 As String = "..\..\Resources\bomb02.wav"
+    Private _bomb_flag As Boolean = False
     Private Function CrossJudge(a As Invader, s As Shot) As Boolean
         For i = 0 To a.ID_MAX - 1
             For j = 0 To s.ID_MAX - 1
@@ -139,7 +140,13 @@
                         a._def(i) = a._def(i) - 1
                         s._y(j) = -100
                         If a._def(i) = 0 Then
-                            mciSendString("play """ & BOMB_WAV & """", "", 0, 0)
+                            If _bomb_flag = False Then
+                                mciSendString("play """ & BOMB_WAV & """", "", 0, 0)
+                                _bomb_flag = True
+                            Else
+                                mciSendString("play """ & BOMB_WAV_02 & """", "", 0, 0)
+                                _bomb_flag = False
+                            End If
                             a._y(i) = 1000
                         End If
                     End If
