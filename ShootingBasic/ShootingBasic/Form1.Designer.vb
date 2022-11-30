@@ -44,7 +44,7 @@ Partial Class Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(524, 425)
+        Me.ClientSize = New System.Drawing.Size(1361, 729)
         Me.Controls.Add(Me.PictureBox1)
         Me.DoubleBuffered = True
         Me.Name = "Form1"

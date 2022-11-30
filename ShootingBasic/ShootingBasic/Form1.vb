@@ -76,19 +76,19 @@
     End Class
     Private Class Invader
         Public _img As Bitmap = New Bitmap("..\..\Resources\alien.bmp")
-        Public ID_MAX = 20
+        Public ID_MAX = 144
         Public H_BUFF = 100
         Public V_BUFF = 0
         Public _t As Double = 0
-        Public _x(20) As Integer
-        Public _y(20) As Integer
+        Public _x(ID_MAX) As Integer
+        Public _y(ID_MAX) As Integer
         Public _width As Integer = _img.Width
         Public _height As Integer = _img.Height
-        Public _def(20) As Integer
+        Public _def(ID_MAX) As Integer
         Public Sub New()
             For i = 0 To (ID_MAX - 1)
-                _x(i) = (i Mod 5) * 64 + H_BUFF
-                _y(i) = Int(i / 5) * 64 + V_BUFF
+                _x(i) = (i Mod 18) * 64 + H_BUFF
+                _y(i) = Int(i / 18) * 64 + V_BUFF
                 _def(i) = 10
             Next
         End Sub
@@ -162,7 +162,7 @@
     Private _s As Shot = New Shot
     Private _a As Invader = New Invader
     Private _e As EnemyShot = New EnemyShot
-    Private _gxy As Bitmap = New Bitmap("..\..\Resources\galaxy.bmp")
+    Private _gxy As Bitmap = New Bitmap("..\..\Resources\galaxy_l.bmp")
     Private _wav As System.Media.SoundPlayer = Nothing
     Sub ControllerCheck()
         Dim ret As Integer
