@@ -13,9 +13,9 @@
         Public _ctrl As Boolean = False
     End Class
     Private Class Fighter
-        Public _img As Bitmap = New Bitmap("..\..\Resources\fighter.bmp")
-        Public _x As Integer = 228
-        Public _y As Integer = 340
+        Public _img As Bitmap = New Bitmap("..\..\Resources\fighter.png")
+        Public _x As Integer = 1377 / 2 - 48 / 2
+        Public _y As Integer = 768 - 48 * 4
         Public SPEED_FIGHTER = 4
         Public Sub Move(c As Controller, s As Shot)
             If c._l = True Then
@@ -34,7 +34,7 @@
         End Sub
     End Class
     Private Class Shot
-        Public _img As Bitmap = New Bitmap("..\..\Resources\shot.bmp")
+        Public _img As Bitmap = New Bitmap("..\..\Resources\shot.png")
         Private SHOT_WAV As String = "..\..\Resources\shot.wav"
         Private SHOT_WAV_02 As String = "..\..\Resources\shot02.wav"
         Private BUFF_WAV As Integer = 16
@@ -75,7 +75,7 @@
         End Sub
     End Class
     Private Class Invader
-        Public _img As Bitmap = New Bitmap("..\..\Resources\alien.bmp")
+        Public _img As Bitmap = New Bitmap("..\..\Resources\alien.png")
         Public ID_MAX = 144
         Public H_BUFF = 100
         Public V_BUFF = 0
@@ -104,7 +104,7 @@
         End Sub
     End Class
     Private Class EnemyShot
-        Public _img As Bitmap = New Bitmap("..\..\Resources\e_shot.bmp")
+        Public _img As Bitmap = New Bitmap("..\..\Resources\e_shot.png")
         Public SPEED_SHOT = 4
         Public ID_MAX = 5
         Private _id As Integer = 0
@@ -162,7 +162,7 @@
     Private _s As Shot = New Shot
     Private _a As Invader = New Invader
     Private _e As EnemyShot = New EnemyShot
-    Private _gxy As Bitmap = New Bitmap("..\..\Resources\galaxy_l.bmp")
+    Private _gxy As Bitmap = New Bitmap("..\..\Resources\galaxy_l.png")
     Private _wav As System.Media.SoundPlayer = Nothing
     Sub ControllerCheck()
         Dim ret As Integer
