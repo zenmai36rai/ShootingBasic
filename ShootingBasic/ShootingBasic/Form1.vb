@@ -35,8 +35,11 @@
     End Class
     Private Class Shot
         Public _img As Bitmap = New Bitmap("..\..\Resources\shot.png")
-        Private SHOT_WAV As String = "..\..\Resources\shot.wav"
+        Private SHOT_WAV_01 As String = "..\..\Resources\shot001.wav"
         Private SHOT_WAV_02 As String = "..\..\Resources\shot02.wav"
+        Private SHOT_WAV_03 As String = "..\..\Resources\shot03.wav"
+        Private SHOT_WAV_04 As String = "..\..\Resources\shot04.wav"
+        Private SHOT_WAV_05 As String = "..\..\Resources\shot05.wav"
         Private BUFF_WAV As Integer = 16
         Private _buff As Integer = BUFF_WAV
         Public ID_MAX = 5
@@ -51,10 +54,16 @@
                 Exit Sub
             End If
 
-            If _buff = BUFF_WAV Then
-                mciSendString("play """ & SHOT_WAV & """", "", 0, 0)
-            Else
+            If _id = 0 Then
+                mciSendString("play """ & SHOT_WAV_01 & """", "", 0, 0)
+            ElseIf _id = 1 Then
                 mciSendString("play """ & SHOT_WAV_02 & """", "", 0, 0)
+            ElseIf _id = 2 Then
+                mciSendString("play """ & SHOT_WAV_03 & """", "", 0, 0)
+            ElseIf _id = 3 Then
+                mciSendString("play """ & SHOT_WAV_04 & """", "", 0, 0)
+            ElseIf _id = 4 Then
+                mciSendString("play """ & SHOT_WAV_05 & """", "", 0, 0)
             End If
 
             _x(_id) = x
