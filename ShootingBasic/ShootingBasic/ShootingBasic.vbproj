@@ -124,7 +124,11 @@
     <Content Include="Resources\alien.bmp" />
     <Content Include="Resources\alien.png" />
     <Content Include="Resources\bomb.wav" />
+    <Content Include="Resources\bomb01.wav" />
     <Content Include="Resources\bomb02.wav" />
+    <Content Include="Resources\bomb03.wav" />
+    <Content Include="Resources\bomb04.wav" />
+    <Content Include="Resources\bomb05.wav" />
     <Content Include="Resources\e_shot.bmp" />
     <Content Include="Resources\fighter.bmp" />
     <Content Include="Resources\fighter.png" />

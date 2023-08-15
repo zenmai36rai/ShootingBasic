@@ -98,7 +98,7 @@
             For i = 0 To (ID_MAX - 1)
                 _x(i) = (i Mod 18) * 64 + H_BUFF
                 _y(i) = Int(i / 18) * 64 + V_BUFF
-                _def(i) = 10
+                _def(i) = 3
             Next
         End Sub
         Public Sub Move(ByRef e As EnemyShot)
@@ -138,9 +138,13 @@
             Next
         End Sub
     End Class
-    Private BOMB_WAV As String = "..\..\Resources\bomb.wav"
+    Private BOMB_WAV_01 As String = "..\..\Resources\bomb01.wav"
     Private BOMB_WAV_02 As String = "..\..\Resources\bomb02.wav"
-    Private _bomb_flag As Boolean = False
+    Private BOMB_WAV_03 As String = "..\..\Resources\bomb03.wav"
+    Private BOMB_WAV_04 As String = "..\..\Resources\bomb04.wav"
+    Private BOMB_WAV_05 As String = "..\..\Resources\bomb05.wav"
+    Private _bomb_count As Integer = 0
+    Const BOMB_COUNT_MAX As Integer = 5
     Private Function CrossJudge(a As Invader, s As Shot) As Boolean
         For i = 0 To a.ID_MAX - 1
             For j = 0 To s.ID_MAX - 1
@@ -149,12 +153,21 @@
                         a._def(i) = a._def(i) - 1
                         s._y(j) = -100
                         If a._def(i) = 0 Then
-                            If _bomb_flag = False Then
-                                mciSendString("play """ & BOMB_WAV & """", "", 0, 0)
-                                _bomb_flag = True
-                            Else
+                            If _bomb_count = 0 Then
+                                mciSendString("play """ & BOMB_WAV_01 & """", "", 0, 0)
+                                _bomb_count = _bomb_count + 1
+                            ElseIf _bomb_count = 1 Then
                                 mciSendString("play """ & BOMB_WAV_02 & """", "", 0, 0)
-                                _bomb_flag = False
+                                _bomb_count = _bomb_count + 1
+                            ElseIf _bomb_count = 2 Then
+                                mciSendString("play """ & BOMB_WAV_03 & """", "", 0, 0)
+                                _bomb_count = _bomb_count + 1
+                            ElseIf _bomb_count = 3 Then
+                                mciSendString("play """ & BOMB_WAV_04 & """", "", 0, 0)
+                                _bomb_count = _bomb_count + 1
+                            Else
+                                mciSendString("play """ & BOMB_WAV_05 & """", "", 0, 0)
+                                _bomb_count = 0
                             End If
                             a._y(i) = 1000
                         End If
