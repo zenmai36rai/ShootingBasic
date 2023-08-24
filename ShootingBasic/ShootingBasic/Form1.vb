@@ -12,10 +12,12 @@
         Public _s As Boolean = False
         Public _ctrl As Boolean = False
     End Class
+    Const SCREEN_WIDTH As Integer = 1377
+    Const SCREEN_HIGHT As Integer = 768
     Private Class Fighter
         Public _img As Bitmap = New Bitmap("..\..\Resources\fighter.png")
-        Public _x As Integer = 1377 / 2 - 48 / 2
-        Public _y As Integer = 768 - 48 * 4
+        Public _x As Integer = SCREEN_WIDTH / 2 - 48 / 2
+        Public _y As Integer = SCREEN_HIGHT - 48 * 4
         Public SPEED_FIGHTER = 4
         Public Sub Move(c As Controller, s As Shot)
             If c._l = True Then
@@ -89,11 +91,17 @@
         Public H_BUFF = 100
         Public V_BUFF = 0
         Public _t As Double = 0
-        Public _x(ID_MAX) As Integer
-        Public _y(ID_MAX) As Integer
+        Public _x(ID_MAX) As Double
+        Public _y(ID_MAX) As Double
         Public _width As Integer = _img.Width
         Public _height As Integer = _img.Height
         Public _def(ID_MAX) As Integer
+        Const MOV_LEFT As Integer = 0
+        Const MOV_RIGHT As Integer = 1
+        Const MOV_DOWN As Integer = 2
+        Public _downposition As Integer = 0
+        Public _moveflag As Integer = MOV_LEFT
+        Public _movespeed As Double = 0.02
         Public Sub New()
             For i = 0 To (ID_MAX - 1)
                 _x(i) = (i Mod 18) * 64 + H_BUFF
@@ -102,10 +110,37 @@
             Next
         End Sub
         Public Sub Move(ByRef e As EnemyShot)
-            For i = 0 To (ID_MAX - 1)
-                _t = _t + 0.0006
-                _x(i) = _x(i) - Math.Cos(_t)
-            Next
+            Dim b As Boolean = False
+            If _moveflag = MOV_LEFT Then
+                For i = 0 To (ID_MAX - 1)
+                    _x(i) = _x(i) - _movespeed
+                    If _x(i) < 1 And _y(i) < 1000 Then
+                        b = True
+                    End If
+                Next
+                If b Then
+                    _moveflag = MOV_RIGHT
+                End If
+            ElseIf _moveflag = MOV_RIGHT Then
+                For i = 0 To (ID_MAX - 1)
+                    _x(i) = _x(i) + _movespeed
+                    If _x(i) > SCREEN_WIDTH - 64 And _y(i) < 1000 Then
+                        b = True
+                    End If
+                Next
+                If b = True Then
+                    _moveflag = MOV_DOWN
+                    _downposition = 64 + H_BUFF
+                End If
+            ElseIf _moveflag = MOV_DOWN Then
+                For i = 0 To (ID_MAX - 1)
+                    _y(i) = _y(i) + _movespeed
+                Next
+                _downposition = _downposition - 1
+                If _downposition = 0 Then
+                    _moveflag = MOV_LEFT
+                End If
+            End If
             Dim r As Integer = Rnd() * 2048
             If r < ID_MAX Then
                 e._shoot(_x(r), _y(r))
@@ -216,7 +251,9 @@
         '_g.FillRectangle(Brushes.Black, 0, 0, Me.Width, Me.Height)
         _g.DrawImage(_gxy, 0, 0)
         For i = 0 To (_a.ID_MAX - 1)
-            _g.DrawImage(_a._img, _a._x(i), _a._y(i))
+            Dim x As Integer = _a._x(i)
+            Dim y As Integer = _a._y(i)
+            _g.DrawImage(_a._img, x, y)
         Next
         For i = 0 To 2
             _g.DrawImage(_s._img, _s._x(i), _s._y(i))
