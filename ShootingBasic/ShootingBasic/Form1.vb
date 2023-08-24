@@ -87,8 +87,10 @@
     End Class
     Private Class Invader
         Public _img As Bitmap = New Bitmap("..\..\Resources\alien.png")
-        Public ID_MAX = 144
-        Public H_BUFF = 100
+        Public ENEMY_COLOM = 16
+        Public ENEMY_LOW = 8
+        Public ID_MAX = ENEMY_COLOM * ENEMY_LOW
+        Public H_BUFF = 164
         Public V_BUFF = 0
         Public _t As Double = 0
         Public _x(ID_MAX) As Double
@@ -97,15 +99,16 @@
         Public _height As Integer = _img.Height
         Public _def(ID_MAX) As Integer
         Const MOV_LEFT As Integer = 0
-        Const MOV_RIGHT As Integer = 1
-        Const MOV_DOWN As Integer = 2
+        Const MOV_DOWN_L As Integer = 1
+        Const MOV_RIGHT As Integer = 2
+        Const MOV_DOWN_R As Integer = 3
         Public _downposition As Integer = 0
         Public _moveflag As Integer = MOV_LEFT
         Public _movespeed As Double = 0.02
         Public Sub New()
             For i = 0 To (ID_MAX - 1)
-                _x(i) = (i Mod 18) * 64 + H_BUFF
-                _y(i) = Int(i / 18) * 64 + V_BUFF
+                _x(i) = (i Mod ENEMY_COLOM) * 64 + H_BUFF
+                _y(i) = Int(i / ENEMY_COLOM) * 64 + V_BUFF
                 _def(i) = 3
             Next
         End Sub
@@ -118,8 +121,9 @@
                         b = True
                     End If
                 Next
-                If b Then
-                    _moveflag = MOV_RIGHT
+                If b = True Then
+                    _moveflag = MOV_DOWN_L
+                    _downposition = (64 + V_BUFF) * 25
                 End If
             ElseIf _moveflag = MOV_RIGHT Then
                 For i = 0 To (ID_MAX - 1)
@@ -129,10 +133,18 @@
                     End If
                 Next
                 If b = True Then
-                    _moveflag = MOV_DOWN
-                    _downposition = 64 + H_BUFF
+                    _moveflag = MOV_DOWN_R
+                    _downposition = (64 + V_BUFF) * 25
                 End If
-            ElseIf _moveflag = MOV_DOWN Then
+            ElseIf _moveflag = MOV_DOWN_L Then
+                For i = 0 To (ID_MAX - 1)
+                    _y(i) = _y(i) + _movespeed
+                Next
+                _downposition = _downposition - 1
+                If _downposition = 0 Then
+                    _moveflag = MOV_RIGHT
+                End If
+            ElseIf _moveflag = MOV_DOWN_R Then
                 For i = 0 To (ID_MAX - 1)
                     _y(i) = _y(i) + _movespeed
                 Next
