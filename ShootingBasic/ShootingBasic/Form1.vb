@@ -86,7 +86,9 @@
         End Sub
     End Class
     Private Class Invader
-        Public _img As Bitmap = New Bitmap("..\..\Resources\alien.png")
+        Public _img As Bitmap
+        Public _img_green As Bitmap = New Bitmap("..\..\Resources\alien.png")
+        Public _img_red As Bitmap = New Bitmap("..\..\Resources\alien_red.png")
         Public ENEMY_COLOM = 16
         Public ENEMY_LOW = 8
         Public ID_MAX = ENEMY_COLOM * ENEMY_LOW
@@ -95,8 +97,8 @@
         Public _t As Double = 0
         Public _x(ID_MAX) As Double
         Public _y(ID_MAX) As Double
-        Public _width As Integer = _img.Width
-        Public _height As Integer = _img.Height
+        Public _width As Integer = _img_green.Width
+        Public _height As Integer = _img_green.Height
         Public _def(ID_MAX) As Integer
         Const MOV_LEFT As Integer = 0
         Const MOV_DOWN_L As Integer = 1
@@ -105,14 +107,32 @@
         Public _downposition As Integer = 0
         Public _moveflag As Integer = MOV_LEFT
         Public _movespeed As Double = 0.02
+        Public _downspeed As Double = 0.02
         Public Sub New()
+            _img = _img_green
             For i = 0 To (ID_MAX - 1)
                 _x(i) = (i Mod ENEMY_COLOM) * 64 + H_BUFF
                 _y(i) = Int(i / ENEMY_COLOM) * 64 + V_BUFF
                 _def(i) = 3
             Next
         End Sub
+        Public Sub CountAlien()
+            Dim count = 0
+            For i = 0 To (ID_MAX - 1)
+                If _y(i) <= 999 Then
+                    count = count + 1
+                End If
+            Next
+            If count <= 3 Then
+                _img = _img_red
+                _movespeed = 0.2
+            Else
+                _img = _img_green
+                _movespeed = 0.02
+            End If
+        End Sub
         Public Sub Move(ByRef e As EnemyShot)
+            CountAlien()
             Dim b As Boolean = False
             If _moveflag = MOV_LEFT Then
                 For i = 0 To (ID_MAX - 1)
@@ -138,7 +158,7 @@
                 End If
             ElseIf _moveflag = MOV_DOWN_L Then
                 For i = 0 To (ID_MAX - 1)
-                    _y(i) = _y(i) + _movespeed
+                    _y(i) = _y(i) + _downspeed
                 Next
                 _downposition = _downposition - 1
                 If _downposition = 0 Then
@@ -146,7 +166,7 @@
                 End If
             ElseIf _moveflag = MOV_DOWN_R Then
                 For i = 0 To (ID_MAX - 1)
-                    _y(i) = _y(i) + _movespeed
+                    _y(i) = _y(i) + _downspeed
                 Next
                 _downposition = _downposition - 1
                 If _downposition = 0 Then
