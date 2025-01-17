@@ -315,6 +315,7 @@
     Private _e As EnemyShot = New EnemyShot
     Private _u As UFO = New UFO
     Private _gxy As Bitmap = New Bitmap("..\..\Resources\galaxy_l.png")
+    Private _gxy_title As Bitmap = New Bitmap("..\..\Resources\galaxy_title.png")
     Private _gxy_red As Bitmap = New Bitmap("..\..\Resources\galaxy_red.png")
     Private _wav As System.Media.SoundPlayer = Nothing
     Sub ControllerCheck()
@@ -370,9 +371,23 @@
         _g.Dispose()
         PictureBox1.Image = canvas
     End Sub
+    Sub Title()
+        PictureBox1.Image = _gxy_title
+        If _c._ctrl Then
+            SCENE_STATE = GAME_SCENE
+            _wav.PlayLooping()
+        End If
+    End Sub
+    Const TITLE_SCENE = 0
+    Const GAME_SCENE = 1
+    Private SCENE_STATE As Integer = TITLE_SCENE
     Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer1.Tick
         Call ControllerCheck()
-        Call GameLoop()
+        If SCENE_STATE = GAME_SCENE Then
+            Call GameLoop()
+        Else
+            Call Title()
+        End If
     End Sub
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -381,7 +396,6 @@
         PictureBox1.Height = Me.Height
         canvas = New Bitmap(Me.Width, Me.Height)
         _wav = New System.Media.SoundPlayer("..\..\Resources\wpm001.wav")
-        _wav.PlayLooping()
         Timer1.Start()
     End Sub
 
