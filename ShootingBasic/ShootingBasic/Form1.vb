@@ -198,7 +198,7 @@
             End If
             Dim r As Integer = Rnd() * 2048
             If r < ID_MAX Then
-                e._shoot(_x(r), _y(r))
+                e._shoot(_x(r), _y(r), _img.Width)
             End If
         End Sub
     End Class
@@ -211,11 +211,11 @@
         Public _y() As Integer = {1000, 1000, 1000, 1000, 1000}
         Public _width As Integer = _img.Width
         Public _height As Integer = _img.Height
-        Public Sub _shoot(ByVal x As Integer, ByVal y As Integer)
+        Public Sub _shoot(ByVal x As Integer, ByVal y As Integer, ByVal _w As Integer)
             If _y(_id) < 1000 Then
                 Exit Sub
             End If
-            _x(_id) = x
+            _x(_id) = x + (_w / 2) - (_img.Width / 2)
             _y(_id) = y
             _id = _id + 1
             If _id = ID_MAX Then
