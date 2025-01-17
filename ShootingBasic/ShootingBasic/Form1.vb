@@ -112,10 +112,10 @@
         Public _img As Bitmap
         Public _img_green As Bitmap = New Bitmap("..\..\Resources\alien.png")
         Public _img_red As Bitmap = New Bitmap("..\..\Resources\alien_red.png")
-        Public ENEMY_COLOM = 6
-        Public ENEMY_LOW = 6
+        Public ENEMY_COLOM = 7
+        Public ENEMY_LOW = 5
         Public ID_MAX = ENEMY_COLOM * ENEMY_LOW
-        Public H_BUFF = 144
+        Public H_BUFF = 76
         Public V_BUFF = 0
         Public _t As Double = 0
         Public _x(ID_MAX) As Double
