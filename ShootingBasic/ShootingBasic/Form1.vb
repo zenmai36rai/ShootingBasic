@@ -91,10 +91,11 @@
         Public _y As Integer
         Public _width As Integer = _img.Width
         Public _height As Integer = _img.Height
-        Public _a As Integer = 0
+        Public _a As Integer = 1
         Public Sub New()
             _x = -_width
             _y = 0
+            _a = 1
         End Sub
         Public Sub Appere()
             _x = -_width
@@ -115,7 +116,7 @@
         Public ENEMY_COLOM = 7
         Public ENEMY_LOW = 5
         Public ID_MAX = ENEMY_COLOM * ENEMY_LOW
-        Public H_BUFF = 76
+        Public H_BUFF = 64
         Public V_BUFF = 0
         Public _t As Double = 0
         Public _x(ID_MAX) As Double
@@ -134,8 +135,8 @@
         Public Sub New()
             _img = _img_green
             For i = 0 To (ID_MAX - 1)
-                _x(i) = (i Mod ENEMY_COLOM) * 68 + H_BUFF
-                _y(i) = Int(i / ENEMY_COLOM) * 64 + V_BUFF + 82
+                _x(i) = (i Mod ENEMY_COLOM) * 80 + H_BUFF
+                _y(i) = Int(i / ENEMY_COLOM) * 64 + V_BUFF + 36
                 _def(i) = 5
             Next
         End Sub
@@ -267,6 +268,24 @@
         Next
         Return False
     End Function
+    Private Function GameOverJudge(a As Invader, es As EnemyShot, f As Fighter) As Boolean
+        For i = 0 To a.ID_MAX - 1
+            If (a._x(i) < (f._x + f._img.Width)) And (f._x < a._x(i) + a._width) Then
+                If (a._y(i) < f._y + f._img.Height) And (f._y < a._y(i) + a._height) Then
+                    Return True
+                End If
+            End If
+        Next
+
+        For i = 0 To es.ID_MAX - 1
+            If (es._x(i) < (f._x + f._img.Width)) And (f._x < es._x(i) + es._width) Then
+                If (es._y(i) < f._y + f._img.Height) And (f._y < es._y(i) + es._height) Then
+                    Return True
+                End If
+            End If
+        Next
+        Return False
+    End Function
     Private Function Bomb(ByRef _bomb_count As Integer)
         If _bomb_count = 0 Then
             mciSendString("play """ & BOMB_WAV_01 & """", "", 0, 0)
@@ -294,6 +313,7 @@
     Private _e As EnemyShot = New EnemyShot
     Private _u As UFO = New UFO
     Private _gxy As Bitmap = New Bitmap("..\..\Resources\galaxy_l.png")
+    Private _gxy_red As Bitmap = New Bitmap("..\..\Resources\galaxy_red.png")
     Private _wav As System.Media.SoundPlayer = Nothing
     Sub ControllerCheck()
         Dim ret As Integer
@@ -328,7 +348,11 @@
         _u.Move()
         _g = Graphics.FromImage(canvas)
         '_g.FillRectangle(Brushes.Black, 0, 0, Me.Width, Me.Height)
-        _g.DrawImage(_gxy, 0, 0)
+        If GameOverJudge(_a, _e, _f) = False Then
+            _g.DrawImage(_gxy, 0, 0)
+        Else
+            _g.DrawImage(_gxy_red, 0, 0)
+        End If
         For i = 0 To (_a.ID_MAX - 1)
             Dim x As Integer = _a._x(i)
             Dim y As Integer = _a._y(i)

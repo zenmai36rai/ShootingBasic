@@ -135,6 +135,7 @@
     <Content Include="Resources\galaxy.bmp" />
     <Content Include="Resources\galaxy_l.bmp" />
     <Content Include="Resources\galaxy_l.png" />
+    <Content Include="Resources\galaxy_red.png" />
     <Content Include="Resources\shield.bmp" />
     <Content Include="Resources\shield.png" />
     <Content Include="Resources\shot.bmp" />
