@@ -13,11 +13,11 @@
         Public _ctrl As Boolean = False
     End Class
     Const SCREEN_WIDTH As Integer = 600
-    Const SCREEN_HIGHT As Integer = 768
+    Const SCREEN_HIGHT As Integer = 704
     Private Class Fighter
         Public _img As Bitmap = New Bitmap("..\..\Resources\fighter.png")
         Public _x As Integer = SCREEN_WIDTH / 2 - 48 / 2
-        Public _y As Integer = SCREEN_HIGHT - 48 * 4
+        Public _y As Integer = SCREEN_HIGHT - 48
         Public SPEED_FIGHTER = 4
         Public Sub Move(c As Controller, s As Shot)
             If c._l = True Then
@@ -115,7 +115,7 @@
         Public ENEMY_COLOM = 6
         Public ENEMY_LOW = 6
         Public ID_MAX = ENEMY_COLOM * ENEMY_LOW
-        Public H_BUFF = 164
+        Public H_BUFF = 144
         Public V_BUFF = 0
         Public _t As Double = 0
         Public _x(ID_MAX) As Double
@@ -127,16 +127,16 @@
         Const MOV_DOWN_L As Integer = 1
         Const MOV_RIGHT As Integer = 2
         Const MOV_DOWN_R As Integer = 3
-        Public _downposition As Integer = 0
+        Public _downposition As Double = 0
         Public _moveflag As Integer = MOV_LEFT
         Public _movespeed As Double = 0.05
         Public _downspeed As Double = 0.05
         Public Sub New()
             _img = _img_green
             For i = 0 To (ID_MAX - 1)
-                _x(i) = (i Mod ENEMY_COLOM) * 64 + H_BUFF
+                _x(i) = (i Mod ENEMY_COLOM) * 68 + H_BUFF
                 _y(i) = Int(i / ENEMY_COLOM) * 64 + V_BUFF + 82
-                _def(i) = 3
+                _def(i) = 5
             Next
         End Sub
         Public Sub CountAlien()
@@ -149,9 +149,11 @@
             If count <= 3 Then
                 _img = _img_red
                 _movespeed = 0.2
+                _downspeed = 0.2
             Else
                 _img = _img_green
                 _movespeed = 0.05
+                _downspeed = 0.05
             End If
         End Sub
         Public Sub Move(ByRef e As EnemyShot)
@@ -183,16 +185,16 @@
                 For i = 0 To (ID_MAX - 1)
                     _y(i) = _y(i) + _downspeed
                 Next
-                _downposition = _downposition - 1
-                If _downposition = 0 Then
+                _downposition = _downposition - _downspeed * 20
+                If _downposition <= 0 Then
                     _moveflag = MOV_RIGHT
                 End If
             ElseIf _moveflag = MOV_DOWN_R Then
                 For i = 0 To (ID_MAX - 1)
                     _y(i) = _y(i) + _downspeed
                 Next
-                _downposition = _downposition - 1
-                If _downposition = 0 Then
+                _downposition = _downposition - _downspeed * 20
+                If _downposition <= 0 Then
                     _moveflag = MOV_LEFT
                 End If
             End If
