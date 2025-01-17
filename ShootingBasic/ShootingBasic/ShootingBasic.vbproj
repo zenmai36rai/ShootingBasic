@@ -145,6 +145,8 @@
     <Content Include="Resources\shot03.wav" />
     <Content Include="Resources\shot04.wav" />
     <Content Include="Resources\shot05.wav" />
+    <Content Include="Resources\ufo.bmp" />
+    <Content Include="Resources\ufo.png" />
     <Content Include="Resources\wpm001.wav" />
     <Content Include="Resources\yarare.wav" />
   </ItemGroup>

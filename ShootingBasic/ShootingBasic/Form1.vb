@@ -12,7 +12,7 @@
         Public _s As Boolean = False
         Public _ctrl As Boolean = False
     End Class
-    Const SCREEN_WIDTH As Integer = 1377
+    Const SCREEN_WIDTH As Integer = 600
     Const SCREEN_HIGHT As Integer = 768
     Private Class Fighter
         Public _img As Bitmap = New Bitmap("..\..\Resources\fighter.png")
@@ -31,7 +31,7 @@
                 _y = _y + SPEED_FIGHTER
             End If
             If (c._s = True) Or (c._ctrl = True) Then
-                s._shoot(_x, _y)
+                s._shoot(_x, _y, _img.Width)
             End If
         End Sub
     End Class
@@ -51,7 +51,7 @@
         Public _y() As Integer = {-100, -100, -100, -100, -100}
         Public _width As Integer = _img.Width
         Public _height As Integer = _img.Height
-        Public Sub _shoot(ByVal x As Integer, ByVal y As Integer)
+        Public Sub _shoot(ByVal x As Integer, ByVal y As Integer, ByVal w As Integer)
             If _y(_id) > -100 Then
                 Exit Sub
             End If
@@ -68,7 +68,7 @@
                 mciSendString("play """ & SHOT_WAV_05 & """", "", 0, 0)
             End If
 
-            _x(_id) = x
+            _x(_id) = x + (w / 2) - (_width / 2)
             _y(_id) = y
             _id = _id + 1
             If _id = ID_MAX Then
@@ -85,12 +85,35 @@
             Next
         End Sub
     End Class
+    Private Class UFO
+        Public _img As Bitmap = New Bitmap("..\..\Resources\ufo.png")
+        Public _x As Integer
+        Public _y As Integer
+        Public _width As Integer = _img.Width
+        Public _height As Integer = _img.Height
+        Public _a As Integer = 0
+        Public Sub New()
+            _x = -_width
+            _y = 0
+        End Sub
+        Public Sub Appere()
+            _x = -_width
+            _y = 0
+            _a = 1
+        End Sub
+        Public Sub Move()
+            _x = _x + 4
+            If _x > 600 Then
+                _a = 0
+            End If
+        End Sub
+    End Class
     Private Class Invader
         Public _img As Bitmap
         Public _img_green As Bitmap = New Bitmap("..\..\Resources\alien.png")
         Public _img_red As Bitmap = New Bitmap("..\..\Resources\alien_red.png")
-        Public ENEMY_COLOM = 16
-        Public ENEMY_LOW = 8
+        Public ENEMY_COLOM = 6
+        Public ENEMY_LOW = 6
         Public ID_MAX = ENEMY_COLOM * ENEMY_LOW
         Public H_BUFF = 164
         Public V_BUFF = 0
@@ -106,13 +129,13 @@
         Const MOV_DOWN_R As Integer = 3
         Public _downposition As Integer = 0
         Public _moveflag As Integer = MOV_LEFT
-        Public _movespeed As Double = 0.02
-        Public _downspeed As Double = 0.02
+        Public _movespeed As Double = 0.05
+        Public _downspeed As Double = 0.05
         Public Sub New()
             _img = _img_green
             For i = 0 To (ID_MAX - 1)
                 _x(i) = (i Mod ENEMY_COLOM) * 64 + H_BUFF
-                _y(i) = Int(i / ENEMY_COLOM) * 64 + V_BUFF
+                _y(i) = Int(i / ENEMY_COLOM) * 64 + V_BUFF + 82
                 _def(i) = 3
             Next
         End Sub
@@ -128,7 +151,7 @@
                 _movespeed = 0.2
             Else
                 _img = _img_green
-                _movespeed = 0.02
+                _movespeed = 0.05
             End If
         End Sub
         Public Sub Move(ByRef e As EnemyShot)
@@ -143,7 +166,7 @@
                 Next
                 If b = True Then
                     _moveflag = MOV_DOWN_L
-                    _downposition = (64 + V_BUFF) * 25
+                    _downposition = (32 + V_BUFF) * 25
                 End If
             ElseIf _moveflag = MOV_RIGHT Then
                 For i = 0 To (ID_MAX - 1)
@@ -154,7 +177,7 @@
                 Next
                 If b = True Then
                     _moveflag = MOV_DOWN_R
-                    _downposition = (64 + V_BUFF) * 25
+                    _downposition = (32 + V_BUFF) * 25
                 End If
             ElseIf _moveflag = MOV_DOWN_L Then
                 For i = 0 To (ID_MAX - 1)
@@ -220,22 +243,7 @@
                         a._def(i) = a._def(i) - 1
                         s._y(j) = -100
                         If a._def(i) = 0 Then
-                            If _bomb_count = 0 Then
-                                mciSendString("play """ & BOMB_WAV_01 & """", "", 0, 0)
-                                _bomb_count = _bomb_count + 1
-                            ElseIf _bomb_count = 1 Then
-                                mciSendString("play """ & BOMB_WAV_02 & """", "", 0, 0)
-                                _bomb_count = _bomb_count + 1
-                            ElseIf _bomb_count = 2 Then
-                                mciSendString("play """ & BOMB_WAV_03 & """", "", 0, 0)
-                                _bomb_count = _bomb_count + 1
-                            ElseIf _bomb_count = 3 Then
-                                mciSendString("play """ & BOMB_WAV_04 & """", "", 0, 0)
-                                _bomb_count = _bomb_count + 1
-                            Else
-                                mciSendString("play """ & BOMB_WAV_05 & """", "", 0, 0)
-                                _bomb_count = 0
-                            End If
+                            Bomb(_bomb_count)
                             a._y(i) = 1000
                         End If
                     End If
@@ -244,6 +252,37 @@
         Next
         Return False
     End Function
+    Private Function UFOJudge(u As UFO, s As Shot) As Boolean
+        For j = 0 To s.ID_MAX - 1
+            If (u._x < (s._x(j) + s._width)) And (s._x(j) < u._x + u._width) Then
+                If (u._y < s._y(j) + s._height) And (s._y(j) < u._y + u._height) Then
+                    u._a = 0
+                    s._y(j) = -100
+                    Bomb(_bomb_count)
+                    u._x = 1000
+                End If
+            End If
+        Next
+        Return False
+    End Function
+    Private Function Bomb(ByRef _bomb_count As Integer)
+        If _bomb_count = 0 Then
+            mciSendString("play """ & BOMB_WAV_01 & """", "", 0, 0)
+            _bomb_count = _bomb_count + 1
+        ElseIf _bomb_count = 1 Then
+            mciSendString("play """ & BOMB_WAV_02 & """", "", 0, 0)
+            _bomb_count = _bomb_count + 1
+        ElseIf _bomb_count = 2 Then
+            mciSendString("play """ & BOMB_WAV_03 & """", "", 0, 0)
+            _bomb_count = _bomb_count + 1
+        ElseIf _bomb_count = 3 Then
+            mciSendString("play """ & BOMB_WAV_04 & """", "", 0, 0)
+            _bomb_count = _bomb_count + 1
+        Else
+            mciSendString("play """ & BOMB_WAV_05 & """", "", 0, 0)
+            _bomb_count = 0
+        End If
+    End Function
     Private canvas As Bitmap
     Private _g As Graphics
     Private _c As Controller = New Controller
@@ -251,6 +290,7 @@
     Private _s As Shot = New Shot
     Private _a As Invader = New Invader
     Private _e As EnemyShot = New EnemyShot
+    Private _u As UFO = New UFO
     Private _gxy As Bitmap = New Bitmap("..\..\Resources\galaxy_l.png")
     Private _wav As System.Media.SoundPlayer = Nothing
     Sub ControllerCheck()
@@ -269,6 +309,10 @@
     Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer1.Tick
         Call ControllerCheck()
         CrossJudge(_a, _s)
+        UFOJudge(_u, _s)
+        If Rnd() * 200 < 1 And _u._a = 0 Then
+            _u.Appere()
+        End If
         _f.Move(_c, _s)
         For i = 0 To (_s.ID_MAX - 1)
             _s.Move()
@@ -279,6 +323,7 @@
         For i = 0 To (_e.ID_MAX - 1)
             _e.Move()
         Next
+        _u.Move()
         _g = Graphics.FromImage(canvas)
         '_g.FillRectangle(Brushes.Black, 0, 0, Me.Width, Me.Height)
         _g.DrawImage(_gxy, 0, 0)
@@ -294,11 +339,13 @@
         For i = 0 To (_e.ID_MAX - 1)
             _g.DrawImage(_e._img, _e._x(i), _e._y(i))
         Next
+        _g.DrawImage(_u._img, _u._x, _u._y)
         _g.Dispose()
         PictureBox1.Image = canvas
     End Sub
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        Randomize()
         PictureBox1.Width = Me.Width
         PictureBox1.Height = Me.Height
         canvas = New Bitmap(Me.Width, Me.Height)
