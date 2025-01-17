@@ -236,6 +236,7 @@
     Private BOMB_WAV_03 As String = "..\..\Resources\bomb03.wav"
     Private BOMB_WAV_04 As String = "..\..\Resources\bomb04.wav"
     Private BOMB_WAV_05 As String = "..\..\Resources\bomb05.wav"
+    Private FANFARE_WAV As String = "..\..\Resources\fanfare.wav"
     Private _bomb_count As Integer = 0
     Const BOMB_COUNT_MAX As Integer = 5
     Private Function CrossJudge(a As Invader, s As Shot) As Boolean
@@ -261,6 +262,7 @@
                 If (u._y < s._y(j) + s._height) And (s._y(j) < u._y + u._height) Then
                     u._a = 0
                     s._y(j) = -100
+                    mciSendString("play """ & FANFARE_WAV & """", "", 0, 0)
                     Bomb(_bomb_count)
                     u._x = 1000
                 End If
@@ -328,8 +330,7 @@
         ret = GetAsyncKeyState(Keys.Space)
         _c._s = ret <> 0
     End Sub
-    Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer1.Tick
-        Call ControllerCheck()
+    Sub GameLoop()
         CrossJudge(_a, _s)
         UFOJudge(_u, _s)
         If Rnd() * 200 < 1 And _u._a = 0 Then
@@ -368,6 +369,10 @@
         _g.DrawImage(_u._img, _u._x, _u._y)
         _g.Dispose()
         PictureBox1.Image = canvas
+    End Sub
+    Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer1.Tick
+        Call ControllerCheck()
+        Call GameLoop()
     End Sub
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
