@@ -28,10 +28,12 @@ Public Class Form1
             ElseIf c._r = True Then
                 _x = _x + SPEED_FIGHTER
             End If
-            If c._u = True Then
-                _y = _y - SPEED_FIGHTER
-            ElseIf c._d = True Then
-                _y = _y + SPEED_FIGHTER
+            If False Then
+                If c._u = True Then
+                    _y = _y - SPEED_FIGHTER
+                ElseIf c._d = True Then
+                    _y = _y + SPEED_FIGHTER
+                End If
             End If
             If (c._s = True) Or (c._ctrl = True) Then
                 s._shoot(_x, _y, _img.Width)
@@ -142,7 +144,7 @@ Public Class Form1
             For i = 0 To (ID_MAX - 1)
                 _x(i) = (i Mod ENEMY_COLOM) * 80 + H_BUFF
                 _y(i) = Int(i / ENEMY_COLOM) * 64 + V_BUFF + 36
-                _def(i) = 5
+                _def(i) = 4
                 _h(i) = 0
             Next
         End Sub
@@ -218,7 +220,7 @@ Public Class Form1
                     _moveflag = MOV_LEFT
                 End If
             End If
-            Dim r As Integer = Rnd() * 2048
+            Dim r As Integer = Rnd() * 2560
             If r < ID_MAX Then
                 e._shoot(_x(r), _y(r), _img.Width)
             End If
@@ -386,7 +388,7 @@ Public Class Form1
         _u = New UFO
     End Sub
     Sub GameLoop()
-        If Rnd() * 200 < 1 And _u._a = 0 Then
+        If Rnd() * 128 < 1 And _u._a = 0 Then
             _u.Appere()
         End If
         _f.Move(_c, _s)
