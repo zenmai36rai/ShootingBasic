@@ -1,4 +1,7 @@
-﻿Public Class Form1
+﻿' SPACE INVADER LIKE SHOOTING GAME
+' EDIT BY KYOSUKE MIYAZAWA
+' COPYRIGHT SINCE 2023 ALL RIGHTS RESERVED
+Public Class Form1
     <Runtime.InteropServices.DllImport("user32.dll")>
     Private Shared Function GetAsyncKeyState(
         ByVal nVirtKey As Integer) As Integer
@@ -113,6 +116,7 @@
         Public _img As Bitmap
         Public _img_green As Bitmap = New Bitmap("..\..\Resources\alien.png")
         Public _img_red As Bitmap = New Bitmap("..\..\Resources\alien_red.png")
+        Public _img_hit As Bitmap = New Bitmap("..\..\Resources\alien_hit.png")
         Public ENEMY_COLOM = 7
         Public ENEMY_LOW = 5
         Public ID_MAX = ENEMY_COLOM * ENEMY_LOW
@@ -121,6 +125,7 @@
         Public _t As Double = 0
         Public _x(ID_MAX) As Double
         Public _y(ID_MAX) As Double
+        Public _h(ID_MAX) As Integer
         Public _width As Integer = _img_green.Width
         Public _height As Integer = _img_green.Height
         Public _def(ID_MAX) As Integer
@@ -138,13 +143,15 @@
                 _x(i) = (i Mod ENEMY_COLOM) * 80 + H_BUFF
                 _y(i) = Int(i / ENEMY_COLOM) * 64 + V_BUFF + 36
                 _def(i) = 5
+                _h(i) = 0
             Next
         End Sub
-        Public Sub CountAlien()
+        Public Function CountAlien() As Integer
             Dim count = 0
             For i = 0 To (ID_MAX - 1)
                 If _y(i) <= 999 Then
                     count = count + 1
+                    _h(i) = 0
                 End If
             Next
             If count <= 3 Then
@@ -156,6 +163,18 @@
                 _movespeed = 0.05
                 _downspeed = 0.05
             End If
+            Return count
+        End Function
+
+        Public Function GetImage(ByVal count As Integer) As Bitmap
+            If _h(count) = 0 Then
+                Return _img
+            Else
+                Return _img_hit
+            End If
+        End Function
+        Public Sub Hit(ByVal count As Integer)
+            _h(count) = 1
         End Sub
         Public Sub Move(ByRef e As EnemyShot)
             CountAlien()
@@ -231,13 +250,20 @@
             Next
         End Sub
     End Class
+    Private HIT_WAV_01 As String = "..\..\Resources\hit01.wav"
+    Private HIT_WAV_02 As String = "..\..\Resources\hit02.wav"
+    Private HIT_WAV_03 As String = "..\..\Resources\hit03.wav"
+    Private HIT_WAV_04 As String = "..\..\Resources\hit04.wav"
+    Private HIT_WAV_05 As String = "..\..\Resources\hit05.wav"
     Private BOMB_WAV_01 As String = "..\..\Resources\bomb01.wav"
     Private BOMB_WAV_02 As String = "..\..\Resources\bomb02.wav"
     Private BOMB_WAV_03 As String = "..\..\Resources\bomb03.wav"
     Private BOMB_WAV_04 As String = "..\..\Resources\bomb04.wav"
     Private BOMB_WAV_05 As String = "..\..\Resources\bomb05.wav"
+    Private UFO_BONUS_WAV As String = "..\..\Resources\ufo_bonus_01.wav"
     Private FANFARE_WAV As String = "..\..\Resources\fanfare.wav"
     Private _bomb_count As Integer = 0
+    Private _hit_count As Integer = 0
     Const BOMB_COUNT_MAX As Integer = 5
     Private Function CrossJudge(a As Invader, s As Shot) As Boolean
         For i = 0 To a.ID_MAX - 1
@@ -245,6 +271,8 @@
                 If (a._x(i) < (s._x(j) + s._width)) And (s._x(j) < a._x(i) + a._width) Then
                     If (a._y(i) < s._y(j) + s._height) And (s._y(j) < a._y(i) + a._height) Then
                         a._def(i) = a._def(i) - 1
+                        a.Hit(i)
+                        HitShot(_hit_count)
                         s._y(j) = -100
                         If a._def(i) = 0 Then
                             Bomb(_bomb_count)
@@ -262,7 +290,7 @@
                 If (u._y < s._y(j) + s._height) And (s._y(j) < u._y + u._height) Then
                     u._a = 0
                     s._y(j) = -100
-                    mciSendString("play """ & FANFARE_WAV & """", "", 0, 0)
+                    mciSendString("play """ & UFO_BONUS_WAV & """", "", 0, 0)
                     Bomb(_bomb_count)
                     u._x = 1000
                 End If
@@ -306,6 +334,24 @@
             _bomb_count = 0
         End If
     End Function
+    Public Sub HitShot(ByRef _hit_count)
+        If _hit_count = 0 Then
+            mciSendString("play """ & HIT_WAV_01 & """", "", 0, 0)
+            _hit_count = _hit_count + 1
+        ElseIf _hit_count = 1 Then
+            mciSendString("play """ & HIT_WAV_02 & """", "", 0, 0)
+            _hit_count = _hit_count + 1
+        ElseIf _hit_count = 2 Then
+            mciSendString("play """ & HIT_WAV_03 & """", "", 0, 0)
+            _hit_count = _hit_count + 1
+        ElseIf _bomb_count = 3 Then
+            mciSendString("play """ & HIT_WAV_04 & """", "", 0, 0)
+            _hit_count = _hit_count + 1
+        Else
+            mciSendString("play """ & HIT_WAV_05 & """", "", 0, 0)
+            _hit_count = 0
+        End If
+    End Sub
     Private canvas As Bitmap
     Private _g As Graphics
     Private _c As Controller = New Controller
@@ -331,9 +377,15 @@
         ret = GetAsyncKeyState(Keys.Space)
         _c._s = ret <> 0
     End Sub
+
+    Sub InitGame()
+        _f = New Fighter
+        _s = New Shot
+        _a = New Invader
+        _e = New EnemyShot
+        _u = New UFO
+    End Sub
     Sub GameLoop()
-        CrossJudge(_a, _s)
-        UFOJudge(_u, _s)
         If Rnd() * 200 < 1 And _u._a = 0 Then
             _u.Appere()
         End If
@@ -348,6 +400,8 @@
             _e.Move()
         Next
         _u.Move()
+        CrossJudge(_a, _s)
+        UFOJudge(_u, _s)
         _g = Graphics.FromImage(canvas)
         '_g.FillRectangle(Brushes.Black, 0, 0, Me.Width, Me.Height)
         If GameOverJudge(_a, _e, _f) = False Then
@@ -358,7 +412,7 @@
         For i = 0 To (_a.ID_MAX - 1)
             Dim x As Integer = _a._x(i)
             Dim y As Integer = _a._y(i)
-            _g.DrawImage(_a._img, x, y)
+            _g.DrawImage(_a.GetImage(i), x, y)
         Next
         For i = 0 To 2
             _g.DrawImage(_s._img, _s._x(i), _s._y(i))
@@ -370,16 +424,23 @@
         _g.DrawImage(_u._img, _u._x, _u._y)
         _g.Dispose()
         PictureBox1.Image = canvas
+        If _a.CountAlien = 0 Then
+            mciSendString("play """ & FANFARE_WAV & """", "", 0, 0)
+            SCENE_STATE = CLEAR_SCENE
+            _wav.Stop()
+        End If
     End Sub
     Sub Title()
         PictureBox1.Image = _gxy_title
         If _c._ctrl Then
+            InitGame()
             SCENE_STATE = GAME_SCENE
             _wav.PlayLooping()
         End If
     End Sub
     Const TITLE_SCENE = 0
     Const GAME_SCENE = 1
+    Const CLEAR_SCENE = 2
     Private SCENE_STATE As Integer = TITLE_SCENE
     Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer1.Tick
         Call ControllerCheck()

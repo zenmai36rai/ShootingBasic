@@ -137,6 +137,11 @@
     <Content Include="Resources\galaxy_l.png" />
     <Content Include="Resources\galaxy_red.png" />
     <Content Include="Resources\galaxy_title.png" />
+    <Content Include="Resources\hit01.wav" />
+    <Content Include="Resources\hit02.wav" />
+    <Content Include="Resources\hit03.wav" />
+    <Content Include="Resources\hit04.wav" />
+    <Content Include="Resources\hit05.wav" />
     <Content Include="Resources\shield.bmp" />
     <Content Include="Resources\shield.png" />
     <Content Include="Resources\shot.bmp" />
@@ -149,6 +154,7 @@
     <Content Include="Resources\shot05.wav" />
     <Content Include="Resources\ufo.bmp" />
     <Content Include="Resources\ufo.png" />
+    <Content Include="Resources\UFO_BONUS_01.wav" />
     <Content Include="Resources\wpm001.wav" />
     <Content Include="Resources\yarare.wav" />
   </ItemGroup>
