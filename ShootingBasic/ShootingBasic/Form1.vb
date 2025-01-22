@@ -90,6 +90,42 @@ Public Class Form1
             Next
         End Sub
     End Class
+    Private Class Chip
+        Public _x As Double = 0
+        Public _y As Double = 0
+        Public _vx As Double = 0
+        Public _vy As Double = 0
+        Public _life As Integer = 0
+        Public Sub New()
+
+        End Sub
+        Public Sub Hit(ByVal x As Integer, ByVal y As Integer)
+            _x = x
+            _y = y
+            _life = 10
+            Dim angle As Double = Rnd() * 3.14 * 2
+            _vx = Math.Sin(angle) * 8
+            _vy = Math.Cos(angle) * 8
+        End Sub
+        Public Sub Move()
+            If _life = 0 Then
+                Return
+            End If
+            _x = _x + _vx
+            _y = _y + _vy
+            _life = _life - 1
+        End Sub
+    End Class
+    Private Class Chips
+        Public ID_MAX As Integer = 5
+        Public _c(ID_MAX) As Chip
+        Public Sub New()
+            For i = 0 To ID_MAX - 1
+                _c(i) = New Chip
+            Next
+        End Sub
+    End Class
+
     Private Class UFO
         Public _img As Bitmap = New Bitmap("..\..\Resources\ufo.png")
         Public _x As Integer
@@ -275,6 +311,7 @@ Public Class Form1
                         a._def(i) = a._def(i) - 1
                         a.Hit(i)
                         HitShot(_hit_count)
+                        _ch._c(j).Hit(s._x(j), s._y(j))
                         s._y(j) = -100
                         If a._def(i) = 0 Then
                             Bomb(_bomb_count)
@@ -362,6 +399,7 @@ Public Class Form1
     Private _a As Invader = New Invader
     Private _e As EnemyShot = New EnemyShot
     Private _u As UFO = New UFO
+    Private _ch As Chips = New Chips
     Private _gxy As Bitmap = New Bitmap("..\..\Resources\galaxy_l.png")
     Private _gxy_title As Bitmap = New Bitmap("..\..\Resources\galaxy_title.png")
     Private _gxy_red As Bitmap = New Bitmap("..\..\Resources\galaxy_red.png")
@@ -386,6 +424,7 @@ Public Class Form1
         _a = New Invader
         _e = New EnemyShot
         _u = New UFO
+        _ch = New Chips
     End Sub
     Sub GameLoop()
         If Rnd() * 128 < 1 And _u._a = 0 Then
@@ -394,6 +433,7 @@ Public Class Form1
         _f.Move(_c, _s)
         For i = 0 To (_s.ID_MAX - 1)
             _s.Move()
+            _ch._c(i).Move()
         Next
         For i = 0 To (_a.ID_MAX - 1)
             _a.Move(_e)
@@ -425,6 +465,14 @@ Public Class Form1
         Next
         _g.DrawImage(_u._img, _u._x, _u._y)
         _g.Dispose()
+        For i = 0 To (_ch.ID_MAX - 1)
+            Dim x = _ch._c(i)._x
+            Dim y = _ch._c(i)._y
+            Dim l = _ch._c(i)._life
+            If x >= 0 And x <= canvas.Width And y >= 0 And y <= canvas.Height And l > 0 Then
+                canvas.SetPixel(_ch._c(i)._x, _ch._c(i)._y, Color.White)
+            End If
+        Next
         PictureBox1.Image = canvas
         If _a.CountAlien = 0 Then
             mciSendString("play """ & FANFARE_WAV & """", "", 0, 0)
