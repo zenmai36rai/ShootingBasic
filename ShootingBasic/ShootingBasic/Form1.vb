@@ -315,9 +315,11 @@ Public Class Form1
                         _ch._c(j).Hit(s._x(j), s._y(j))
                         s._y(j) = -100
                         If a._def(i) = 0 Then
-                            Score = Score + 50
+                            Score = Score + 20
                             Bomb(_bomb_count)
                             a._y(i) = 1000
+                        Else
+                            Score = Score + 10
                         End If
                     End If
                 End If
