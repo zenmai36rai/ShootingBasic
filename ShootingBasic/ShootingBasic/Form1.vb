@@ -6,6 +6,7 @@ Public Class Form1
     Private Shared Function GetAsyncKeyState(
         ByVal nVirtKey As Integer) As Integer
     End Function
+    Private Score As Integer = 0
     Private Declare Function mciSendString Lib "winmm.dll" Alias "mciSendStringA" (ByVal lpstrCommand As String, ByVal lpstrReturnString As String, ByVal uReturnLength As Long, ByVal hwndCallback As Long) As Long
     Private Class Controller
         Public _d As Boolean = False
@@ -314,6 +315,7 @@ Public Class Form1
                         _ch._c(j).Hit(s._x(j), s._y(j))
                         s._y(j) = -100
                         If a._def(i) = 0 Then
+                            Score = Score + 50
                             Bomb(_bomb_count)
                             a._y(i) = 1000
                         End If
@@ -327,6 +329,7 @@ Public Class Form1
         For j = 0 To s.ID_MAX - 1
             If (u._x < (s._x(j) + s._width)) And (s._x(j) < u._x + u._width) Then
                 If (u._y < s._y(j) + s._height) And (s._y(j) < u._y + u._height) Then
+                    Score = Score + 300
                     u._a = 0
                     s._y(j) = -100
                     mciSendString("play """ & UFO_BONUS_WAV & """", "", 0, 0)
@@ -451,6 +454,8 @@ Public Class Form1
         Else
             _g.DrawImage(_gxy_red, 0, 0)
         End If
+        Dim fnt As New Font("MS UI Gothic", 20)
+        _g.DrawString("score : " + Score.ToString, fnt, Brushes.White, 0, 0)
         For i = 0 To (_a.ID_MAX - 1)
             Dim x As Integer = _a._x(i)
             Dim y As Integer = _a._y(i)
@@ -469,7 +474,7 @@ Public Class Form1
             Dim x = _ch._c(i)._x
             Dim y = _ch._c(i)._y
             Dim l = _ch._c(i)._life
-            If x >= 0 And x <= canvas.Width And y >= 0 And y <= canvas.Height And l > 0 Then
+            If x >= 0 And x < canvas.Width And y >= 0 And y < canvas.Height And l > 0 Then
                 canvas.SetPixel(_ch._c(i)._x, _ch._c(i)._y, Color.White)
             End If
         Next
@@ -482,7 +487,11 @@ Public Class Form1
     End Sub
     Private CtrlFlag = 0
     Sub Title()
-        PictureBox1.Image = _gxy_title
+        _g = Graphics.FromImage(canvas)
+        _g.DrawImage(_gxy_title, 0, 0)
+        Dim fnt As New Font("MS UI Gothic", 20)
+        _g.DrawString("score : " + Score.ToString, fnt, Brushes.White, 0, 0)
+        PictureBox1.Image = canvas
         If _c._ctrl Then
             If CtrlFlag = 0 Then
                 CtrlFlag = 1
