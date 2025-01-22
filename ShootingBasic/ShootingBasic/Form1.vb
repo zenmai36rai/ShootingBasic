@@ -480,12 +480,18 @@ Public Class Form1
             _wav.Stop()
         End If
     End Sub
+    Private CtrlFlag = 0
     Sub Title()
         PictureBox1.Image = _gxy_title
         If _c._ctrl Then
-            InitGame()
-            SCENE_STATE = GAME_SCENE
-            _wav.PlayLooping()
+            If CtrlFlag = 0 Then
+                CtrlFlag = 1
+                InitGame()
+                SCENE_STATE = GAME_SCENE
+                _wav.PlayLooping()
+            End If
+        Else
+            CtrlFlag = 0
         End If
     End Sub
     Const TITLE_SCENE = 0
