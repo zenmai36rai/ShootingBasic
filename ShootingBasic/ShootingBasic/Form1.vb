@@ -315,7 +315,7 @@ Public Class Form1
                         _ch._c(j).Hit(s._x(j), s._y(j))
                         s._y(j) = -100
                         If a._def(i) = 0 Then
-                            Score = Score + 20
+                            Score = Score + 70
                             Bomb(_bomb_count)
                             a._y(i) = 1000
                         Else
@@ -331,7 +331,7 @@ Public Class Form1
         For j = 0 To s.ID_MAX - 1
             If (u._x < (s._x(j) + s._width)) And (s._x(j) < u._x + u._width) Then
                 If (u._y < s._y(j) + s._height) And (s._y(j) < u._y + u._height) Then
-                    Score = Score + 300
+                    Score = Score + 500
                     u._a = 0
                     s._y(j) = -100
                     mciSendString("play """ & UFO_BONUS_WAV & """", "", 0, 0)
@@ -477,7 +477,7 @@ Public Class Form1
             Dim y = _ch._c(i)._y
             Dim l = _ch._c(i)._life
             If x >= 0 And x < canvas.Width And y >= 0 And y < canvas.Height And l > 0 Then
-                canvas.SetPixel(_ch._c(i)._x, _ch._c(i)._y, Color.White)
+                canvas.SetPixel(x, y, Color.White)
             End If
         Next
         PictureBox1.Image = canvas
