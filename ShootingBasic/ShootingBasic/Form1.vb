@@ -471,15 +471,16 @@ Public Class Form1
             _g.DrawImage(_e._img, _e._x(i), _e._y(i))
         Next
         _g.DrawImage(_u._img, _u._x, _u._y)
-        _g.Dispose()
         For i = 0 To (_ch.ID_MAX - 1)
             Dim x = _ch._c(i)._x
             Dim y = _ch._c(i)._y
             Dim l = _ch._c(i)._life
-            If x >= 0 And x < canvas.Width And y >= 0 And y < canvas.Height And l > 0 Then
-                canvas.SetPixel(x, y, Color.White)
+            If l > 0 Then
+                Dim rect As Rectangle = New Rectangle(x, y, 3, 3)
+                _g.DrawRectangle(Pens.White, rect)
             End If
         Next
+        _g.Dispose()
         PictureBox1.Image = canvas
         If _a.CountAlien = 0 Then
             mciSendString("play """ & FANFARE_WAV & """", "", 0, 0)
